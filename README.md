@@ -1,7 +1,9 @@
- ITRACKB4 Laboratory Activity 1
+ITRACKB4 LABORATORY ACTIVITY 12
+Make the Failures Yours
 
-G1. Route model binding needs the route parameter name to match the controller method's variable name (such as `{movie}` and `Movie $movie`), and the variable must be type-hinted with the Eloquent model class. If only the names match, Laravel passes the raw ID string instead of a model. If only the type-hint is present, the names don't match, so Laravel injects an empty `Movie` instance and the ID is never looked up.
-
-G2. The link `/movies/1/delete` matches no registered route, so Laravel returns a 404 even though the URL looks right. The delete route is `DELETE /movies/{movie}`, which is only reached by a form that sends a DELETE request, not by a link that sends a GET request.
-
-G3. If the second argument is left out, `old('title')` returns null on first load, so the edit form shows blank fields and saving would overwrite the movie with empty values. If only `$movie->title` is used without `old()`, the form loses what the user typed after a failed validation and shows the original values again.
+H1.The top of your error page named a file inside vendor. Say why that was not where your mistake was, and where the page showed you it actually was?
+  The vendor file appeared because Laravel detected the error while processing the code. However, the mistake was not in the vendor file because it was part of Laravel's framework. The actual mistake was in my MovieController.php, where I accidentally typed withh() instead of with() when loading the movie's genre.
+H2.You wrote one Log::info line with a context array. Name something it will tell you next month that the error page could not?
+   The Log::info context array can tell me the actual ID of the movie that was saved. Even next month, I can check the laravel.log file to identify which specific movie record was created, while the error page only shows information about an error that happened at that moment.
+H3.Your guard answers with 403 instead of redirecting back with a message. Say when each of the two is the better answer?
+   A 403 Forbidden response is better when the user is not allowed to perform an action, such as deleting the last movie in a genre. Redirecting back with a message is better when the action is not allowed but the user can safely return to the previous page and receive an explanation without seeing an error page.

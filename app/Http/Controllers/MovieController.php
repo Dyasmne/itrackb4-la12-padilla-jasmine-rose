@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Movie;
 use App\Models\Genre;
+use Illuminate\Support\Facades\Log;
 
 class MovieController extends Controller
 {
@@ -63,7 +64,12 @@ class MovieController extends Controller
 
         $validated['is_available'] = $request->boolean('is_available');
 
-        Movie::create($validated);
+        $movie = Movie::create($validated);
+
+        // Log the saved movie with its actual database ID.
+        Log::info('Movie saved', [
+            'id' => $movie->id,
+        ]);
 
         return redirect()
             ->route('movies.index')
@@ -117,8 +123,10 @@ class MovieController extends Controller
      */
     public function destroy(Movie $movie)
     {
+        abort_if($movie->genre->movies()->count() === 1, 403);
+    
         $movie->delete();
-
+    
         return redirect()
             ->route('movies.index')
             ->with('success', 'Movie deleted successfully!');

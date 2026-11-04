@@ -1,3 +1,4 @@
+
 @extends('layouts.app')
 
 @section('title', 'Add Movie')
@@ -10,21 +11,6 @@
         @csrf
 
         <div class="mb-3">
-            <label for="id" class="form-label">Movie ID</label>
-            <input
-                type="number"
-                name="id"
-                id="id"
-                class="form-control"
-                value="{{ old('id') }}"
-            >
-
-            @error('id')
-                <div class="text-danger">{{ $message }}</div>
-            @enderror
-        </div>
-
-        <div class="mb-3">
             <label for="title" class="form-label">Movie Title</label>
             <input
                 type="text"
@@ -32,6 +18,7 @@
                 id="title"
                 class="form-control"
                 value="{{ old('title') }}"
+                required
             >
 
             @error('title')
@@ -40,25 +27,22 @@
         </div>
 
         <div class="mb-3">
-            <label for="genre" class="form-label">Genre</label>
+            <label for="genre_id" class="form-label">Genre</label>
 
-            <select name="genre" id="genre" class="form-select">
+            <select name="genre_id" id="genre_id" class="form-select" required>
                 <option value="">Select Genre</option>
 
-                <option value="Action" @selected(old('genre') == 'Action')>
-                    Action
-                </option>
-
-                <option value="Animation" @selected(old('genre') == 'Animation')>
-                    Animation
-                </option>
-
-                <option value="Sci-Fi" @selected(old('genre') == 'Sci-Fi')>
-                    Sci-Fi
-                </option>
+                @foreach ($genres as $genre)
+                    <option
+                        value="{{ $genre->id }}"
+                        @selected(old('genre_id') == $genre->id)
+                    >
+                        {{ $genre->name }}
+                    </option>
+                @endforeach
             </select>
 
-            @error('genre')
+            @error('genre_id')
                 <div class="text-danger">{{ $message }}</div>
             @enderror
         </div>
@@ -72,7 +56,10 @@
                 id="rating"
                 class="form-control"
                 step="0.1"
+                min="0"
+                max="10"
                 value="{{ old('rating') }}"
+                required
             >
 
             @error('rating')
